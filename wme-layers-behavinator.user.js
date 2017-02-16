@@ -3,7 +3,7 @@
 // @namespace   http://www.tomputtemans.com/
 // @description Makes the layers menu appear when hovering over the button and stick when clicked
 // @include     https://beta.waze.com/*editor/*
-// @version     0.1
+// @version     0.2
 // @grant       none
 // ==/UserScript==
 (function() {
