@@ -15,6 +15,7 @@
     var switcher = document.querySelector('.layer-switcher');
     if (!switcher) {
       setTimeout(init, 300);
+      return;
     }
     var content = switcher.querySelector('.content');
     switcher.addEventListener('click', function(e) {
