@@ -3,29 +3,26 @@
 // @namespace   http://www.tomputtemans.com/
 // @description Makes the layers menu appear when hovering over the button and stick when clicked
 // @include     https://beta.waze.com/*editor/*
-// @version     0.3
+// @version     0.4
 // @grant       none
 // ==/UserScript==
 (function() {
-  function init(e) {
-    if (e && e.user == null) {
-      return;
-    }
-
-    var switcher = document.querySelector('.layer-switcher');
-    if (!switcher) {
+  function init() {
+    if (!document.querySelector('.layer-switcher')) {
       setTimeout(init, 300);
       return;
     }
+    setTimeout(addButtonBehaviour, 50); // necessary as the switcher often hasn't been replaced yet when the mode changes
+  }
+  
+  function addButtonBehaviour() {
+    var switcher = document.querySelector('.layer-switcher');
     var content = switcher.querySelector('.content');
     switcher.addEventListener('click', function(e) {
-      console.log('click received', e);
       if (e.target.classList.contains('toolbar-button')) {
-        console.log('click intercepted');
         e.preventDefault();
         content.classList.toggle('forced');
         content.classList.toggle('not-visible', !content.classList.contains('forced'));
-        document.getElementById('editor-container').style.paddingRight = (content.classList.contains('forced') ? '230px' : '0');
       }
     });
     switcher.addEventListener('mouseover', function() {
@@ -38,7 +35,16 @@
         content.classList.add('not-visible');
       }
     });
+    console.log('Layer behavinator has applied its event listeners to ', switcher);
   }
 
+  function addModeChangeListener() {
+    if (Waze.app && Waze.app.modeController) {
+      Waze.app.modeController.model.bind('change:mode', init);
+    } else {
+      setTimeout(addModeChangeListener, 400);
+    }
+  }
+  addModeChangeListener();
   init();
 })();
