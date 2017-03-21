@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name        WME Beta layers menu behavinator
+// @name        WME layers menu behavinator
 // @namespace   http://www.tomputtemans.com/
 // @description Makes the layers menu appear when hovering over the button and stick when clicked
-// @include     https://beta.waze.com/*editor/*
-// @version     0.4
+// @include     /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor\/.*$/
+// @version     0.6
 // @grant       none
 // ==/UserScript==
 (function() {
@@ -39,8 +39,10 @@
   }
 
   function addModeChangeListener() {
-    if (Waze.app && Waze.app.modeController) {
+    if (Waze.app && Waze.app.modeController && Waze.loginManager) {
       Waze.app.modeController.model.bind('change:mode', init);
+      Waze.loginManager.events.register("login", null, init);
+      Waze.loginManager.events.register("loginStatus", null, init);
     } else {
       setTimeout(addModeChangeListener, 400);
     }
